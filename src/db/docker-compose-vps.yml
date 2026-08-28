@@ -1,0 +1,59 @@
+version: '3.8'
+
+services:
+  # ---------------------------------------------------------------------------
+  # 1. BANCO DE DADOS POSTGRESQL 16 COM VOLUME PERSISTENTE
+  # ---------------------------------------------------------------------------
+  postgres:
+    image: postgres:16-alpine
+    container_name: boasnovas_postgres
+    restart: always
+    environment:
+      POSTGRES_USER: boasnovas_user
+      POSTGRES_PASSWORD: sua_senha_super_secreta_vps
+      POSTGRES_DB: boas_novas_db
+      PGDATA: /var/lib/postgresql/data/pgdata
+    volumes:
+      - pgdata:/var/lib/postgresql/data
+      - ./schema.sql:/docker-entrypoint-initdb.d/init.sql:ro
+    ports:
+      - "5432:5432"
+    healthcheck:
+      test: ["CMD-SHELL", "pg_isready -U boasnovas_user -d boas_novas_db"]
+      interval: 10s
+      timeout: 5s
+      retries: 5
+    networks:
+      - boasnovas_net
+
+  # ---------------------------------------------------------------------------
+  # 2. ROTINA DE BACKUP AUTOMÁTICO DIÁRIO (PG_DUMP)
+  # ---------------------------------------------------------------------------
+  db_backup:
+    image: prodrigestivill/postgres-backup-local:16-alpine
+    container_name: boasnovas_backup
+    restart: always
+    depends_on:
+      - postgres
+    environment:
+      POSTGRES_HOST: postgres
+      POSTGRES_DB: boas_novas_db
+      POSTGRES_USER: boasnovas_user
+      POSTGRES_PASSWORD: sua_senha_super_secreta_vps
+      SCHEDULE: "0 3 * * *" # Todos os dias às 03:00 da madrugada
+      BACKUP_KEEP_DAYS: 30
+      BACKUP_KEEP_WEEKS: 4
+      BACKUP_KEEP_MONTHS: 6
+      HEALTHCHECK_PORT: 8080
+    volumes:
+      - ./backups:/backups
+    networks:
+      - boasnovas_net
+
+volumes:
+  pgdata:
+    driver: local
+
+networks:
+  boasnovas_net:
+    driver: bridge

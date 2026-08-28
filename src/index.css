@@ -1,0 +1,123 @@
+@import "tailwindcss";
+
+@layer base {
+  :root {
+    --gold: #DAA017;
+    --gold-dark: #B8860B;
+    --cream: #F8F5EC;
+    --black: #1A1A1A;
+    --brown: #3A2E1F;
+    --glow: 0 0 20px rgba(218, 160, 23, 0.2);
+  }
+
+  body {
+    background-color: var(--black);
+    color: var(--cream);
+    font-family: 'Plus Jakarta Sans', 'Inter', system-ui, -apple-system, sans-serif;
+    margin: 0;
+  }
+
+  h1, h2, h3, .serif, .font-serif, .font-institutional {
+    font-family: 'Cinzel', 'Playfair Display', 'Georgia', 'Cormorant Garamond', serif;
+    letter-spacing: 0.02em;
+  }
+}
+
+/* Luxury Prestige Theme Utilities */
+.gold-gradient {
+  background: linear-gradient(135deg, var(--gold), var(--gold-dark));
+}
+
+.gold-gradient-text {
+  background: linear-gradient(135deg, #FFE898 0%, var(--gold) 50%, var(--gold-dark) 100%);
+  -webkit-background-clip: text;
+  -webkit-text-fill-color: transparent;
+}
+
+.card-brown {
+  background-color: var(--brown);
+  border: 1px solid rgba(218, 160, 23, 0.2);
+  box-shadow: var(--glow);
+}
+
+.sidebar-item {
+  transition: all 0.2s ease;
+  border-left: 3px solid transparent;
+}
+
+.sidebar-item:hover {
+  background: rgba(218, 160, 23, 0.1);
+  border-left-color: var(--gold);
+  color: var(--gold);
+}
+
+.sidebar-active {
+  background: rgba(218, 160, 23, 0.15);
+  border-left-color: var(--gold);
+  color: var(--gold);
+}
+
+.glow-gold {
+  box-shadow: var(--glow);
+}
+
+.glow-gold-lg {
+  box-shadow: 0 0 35px rgba(218, 160, 23, 0.35);
+}
+
+.border-gold-subtle {
+  border-color: rgba(218, 160, 23, 0.2);
+}
+
+.bg-gold-radial {
+  background: radial-gradient(circle at 50% 0%, rgba(218, 160, 23, 0.15) 0%, rgba(26, 26, 26, 0) 70%);
+}
+
+.card-gold-glass {
+  background: rgba(58, 46, 31, 0.65);
+  backdrop-filter: blur(16px);
+  -webkit-backdrop-filter: blur(16px);
+  border: 1px solid rgba(218, 160, 23, 0.2);
+  box-shadow: var(--glow);
+}
+
+.card-gold-glass:hover {
+  border-color: rgba(218, 160, 23, 0.4);
+  box-shadow: 0 0 25px rgba(218, 160, 23, 0.25);
+}
+
+/* Custom Scrollbars */
+::-webkit-scrollbar {
+  width: 7px;
+  height: 7px;
+}
+
+::-webkit-scrollbar-track {
+  background: #141414;
+}
+
+::-webkit-scrollbar-thumb {
+  background: #3A2E1F;
+  border-radius: 4px;
+  border: 1px solid rgba(218, 160, 23, 0.2);
+}
+
+::-webkit-scrollbar-thumb:hover {
+  background: #B8860B;
+}
+
+@keyframes pulseGoldSlow {
+  0%, 100% {
+    opacity: 0.3;
+    transform: scale(1);
+  }
+  50% {
+    opacity: 0.6;
+    transform: scale(1.04);
+  }
+}
+
+.animate-gold-pulse {
+  animation: pulseGoldSlow 7s ease-in-out infinite;
+}
+

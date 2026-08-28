@@ -1,0 +1,6 @@
+{
+  "name": "Igreja Apostólica Boas Novas",
+  "description": "Sistema de Gestão Eclesiástica Integrada da Igreja Apostólica Boas Novas - Mission Control, Membros, Credenciais com QR Code, Financeiro, Monitoramento CFTV, Lives e Ministérios.",
+  "requestFramePermissions": ["camera"],
+  "majorCapabilities": ["MAJOR_CAPABILITY_SERVER_SIDE_GEMINI_API"]
+}
