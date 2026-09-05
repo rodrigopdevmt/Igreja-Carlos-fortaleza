@@ -29,12 +29,12 @@ export const GoldLogo: React.FC<GoldLogoProps> = ({
         {/* Subtle glow behind logo */}
         <div className={`absolute inset-0 rounded-full bg-[#DAA017]/25 blur-md ${animate ? 'animate-pulse' : ''}`} />
         
-        {/* Metallic Gold Svg Icon - Globe + Fish (Ichthys) + Apostolic Ray Crown */}
+        {/* Metallic Gold Icon - Globe + Fish (Ichthys) + Apostolic Ray Crown */}
         <svg
           viewBox="0 0 100 100"
           fill="none"
           xmlns="http://www.w3.org/2000/svg"
-          className="relative w-full h-full drop-shadow-[0_2px_10px_rgba(218,160,23,0.4)]"
+          className="relative w-full h-full drop-shadow-[0_2px_10px_rgba(218,160,23,0.5)]"
         >
           <defs>
             <linearGradient id="goldGradient" x1="0%" y1="0%" x2="100%" y2="100%">
@@ -106,7 +106,6 @@ export const GoldLogo: React.FC<GoldLogoProps> = ({
           />
 
           {/* Central Stylized Ichthys (Christian Fish Symbol) overlapping with Apostolic Cross */}
-          {/* Top curve of fish */}
           <path
             d="M 24 50 C 35 28, 68 28, 82 58 L 88 52 M 82 58 L 86 66"
             stroke="url(#goldGradient)"
@@ -114,7 +113,6 @@ export const GoldLogo: React.FC<GoldLogoProps> = ({
             strokeLinecap="round"
             strokeLinejoin="round"
           />
-          {/* Bottom curve of fish */}
           <path
             d="M 24 50 C 35 72, 68 72, 82 42 L 88 48 M 82 42 L 86 34"
             stroke="url(#goldGradient)"
@@ -159,7 +157,7 @@ export const GoldLogo: React.FC<GoldLogoProps> = ({
             </span>
           </div>
           <span className={`font-sans tracking-widest uppercase font-semibold text-[#DAA017] ${currentSize.sub}`}>
-            Igreja Apostólica
+            Igreja Apostolica
           </span>
         </div>
       )}

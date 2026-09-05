@@ -217,38 +217,42 @@ export const DocumentsPage: React.FC = () => {
         <div className="flex flex-wrap gap-2">
           <button
             onClick={() => setActiveTab('studio')}
-            className={`flex items-center gap-2 px-4 py-2 rounded-xl text-xs font-bold transition-all ${
+            className={`flex items-center gap-2 px-3 sm:px-4 py-2 rounded-xl text-xs font-bold transition-all ${
               activeTab === 'studio'
                 ? 'bg-[#DAA017] text-[#1A1A1A] shadow-md shadow-[#DAA017]/20'
                 : 'bg-[#1A140E] text-[#F8F5EC]/70 hover:bg-[#2A2015] border border-[#DAA017]/20'
             }`}
           >
             <Sparkles className="w-4 h-4" />
-            Estúdio & Gerador Interativo
+            <span className="hidden sm:inline">Estúdio & Gerador Interativo</span>
+            <span className="sm:hidden">Estúdio</span>
           </button>
 
           <button
             onClick={() => setActiveTab('registry')}
-            className={`flex items-center gap-2 px-4 py-2 rounded-xl text-xs font-bold transition-all ${
+            className={`flex items-center gap-2 px-3 sm:px-4 py-2 rounded-xl text-xs font-bold transition-all ${
               activeTab === 'registry'
                 ? 'bg-[#DAA017] text-[#1A1A1A] shadow-md shadow-[#DAA017]/20'
                 : 'bg-[#1A140E] text-[#F8F5EC]/70 hover:bg-[#2A2015] border border-[#DAA017]/20'
             }`}
           >
             <BookOpen className="w-4 h-4" />
-            Livro de Registros ({documentsRegistry.length})
+            <span className="hidden sm:inline">Livro de Registros</span>
+            <span className="sm:hidden">Registros</span>
+            <span className="text-[10px] opacity-70">({documentsRegistry.length})</span>
           </button>
 
           <button
             onClick={() => setActiveTab('templates')}
-            className={`flex items-center gap-2 px-4 py-2 rounded-xl text-xs font-bold transition-all ${
+            className={`flex items-center gap-2 px-3 sm:px-4 py-2 rounded-xl text-xs font-bold transition-all ${
               activeTab === 'templates'
                 ? 'bg-[#DAA017] text-[#1A1A1A] shadow-md shadow-[#DAA017]/20'
                 : 'bg-[#1A140E] text-[#F8F5EC]/70 hover:bg-[#2A2015] border border-[#DAA017]/20'
             }`}
           >
             <Layers className="w-4 h-4" />
-            Catálogo de Modelos Eclesiásticos
+            <span className="hidden sm:inline">Catálogo de Modelos Eclesiásticos</span>
+            <span className="sm:hidden">Catálogo</span>
           </button>
         </div>
 

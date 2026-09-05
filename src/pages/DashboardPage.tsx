@@ -26,6 +26,7 @@ import { Input } from '@/components/ui/Input';
 import { formatCurrency, formatDate } from '@/lib/utils';
 import { Link } from 'react-router-dom';
 import { DashboardMetrics } from '@/components/dashboard/DashboardMetrics';
+import { CHURCH_ANNOUNCEMENTS } from '@/data/churchData';
 
 const chartData = [
   { month: 'Jan', tithes: 38200, attendance: 980 },
@@ -202,6 +203,35 @@ export const DashboardPage: React.FC = () => {
 
       {/* Recharts Live Analytics Section (Membros Ativos, Ofertas Mensais, Participação em Cultos) */}
       <DashboardMetrics />
+
+      {/* Avisos IABN da Semana */}
+      <div className="rounded-2xl card-gold-glass p-5 sm:p-6">
+        <div className="flex items-center justify-between mb-4">
+          <div className="flex items-center gap-2">
+            <span className="w-1.5 h-6 gold-gradient rounded-full" />
+            <h3 className="font-serif text-lg font-bold text-[#F8F5EC]">Avisos da IABN</h3>
+          </div>
+          <Badge variant="gold" size="sm">Semana do Culto</Badge>
+        </div>
+        <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-3">
+          {CHURCH_ANNOUNCEMENTS.map((aviso, idx) => (
+            <div
+              key={idx}
+              className="flex items-center gap-3 p-3.5 rounded-xl bg-[#1A1A1A]/70 border border-[#DAA017]/20 hover:border-[#DAA017]/50 transition-all"
+            >
+              <div className="p-2.5 rounded-lg bg-[#3A2E1F]/60 border border-[#DAA017]/30 text-[#DAA017] shrink-0">
+                <Calendar className="w-4 h-4" />
+              </div>
+              <div className="min-w-0">
+                <p className="text-sm font-semibold text-[#F8F5EC] truncate">{aviso.title}</p>
+                <p className="text-[11px] text-[#F8F5EC]/50">
+                  {aviso.day} • <span className="text-[#DAA017] font-semibold">{aviso.time}</span>
+                </p>
+              </div>
+            </div>
+          ))}
+        </div>
+      </div>
 
       {/* Live Stream Status & Check-in Portaria Feed */}
       <div className="grid grid-cols-1 lg:grid-cols-3 gap-6">

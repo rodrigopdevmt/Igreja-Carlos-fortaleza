@@ -90,27 +90,27 @@ export const CredentialsPage: React.FC = () => {
           </p>
         </div>
 
-        <div className="flex items-center gap-3">
+        <div className="flex flex-wrap items-center gap-2 sm:gap-3">
           <div className="flex bg-[#221B13] p-1 rounded-xl border border-[#DAA017]/30 text-xs">
             <button
               onClick={() => setActiveTab('cards')}
-              className={`px-3 py-1.5 rounded-lg font-medium transition-all ${
+              className={`px-2.5 sm:px-3 py-2 rounded-lg font-medium transition-all ${
                 activeTab === 'cards'
                   ? 'bg-[#DAA017] text-[#1A1A1A] font-bold shadow-md'
                   : 'text-[#F8F5EC]/70 hover:text-[#F8F5EC]'
               }`}
             >
-              Visualizador de Carteirinhas
+              Carteirinhas
             </button>
             <button
               onClick={() => setActiveTab('scanner')}
-              className={`px-3 py-1.5 rounded-lg font-medium transition-all ${
+              className={`px-2.5 sm:px-3 py-2 rounded-lg font-medium transition-all ${
                 activeTab === 'scanner'
                   ? 'bg-[#DAA017] text-[#1A1A1A] font-bold shadow-md'
                   : 'text-[#F8F5EC]/70 hover:text-[#F8F5EC]'
               }`}
             >
-              Simulador Portaria / Scanner
+              Scanner
             </button>
           </div>
           <Button
@@ -361,21 +361,21 @@ export const CredentialsPage: React.FC = () => {
               <button
                 type="button"
                 onClick={() => setScannerCode('BN-2024-0001')}
-                className="px-2.5 py-1 rounded-md bg-[#1A1A1A] border border-[#DAA017]/30 text-[11px] text-[#F8F5EC] hover:bg-[#DAA017]/20"
+                className="px-3 py-2 rounded-md bg-[#1A1A1A] border border-[#DAA017]/30 text-[11px] text-[#F8F5EC] hover:bg-[#DAA017]/20"
               >
                 Ap. Carlos (0001)
               </button>
               <button
                 type="button"
                 onClick={() => setScannerCode('BN-2024-0142')}
-                className="px-2.5 py-1 rounded-md bg-[#1A1A1A] border border-[#DAA017]/30 text-[11px] text-[#F8F5EC] hover:bg-[#DAA017]/20"
+                className="px-3 py-2 rounded-md bg-[#1A1A1A] border border-[#DAA017]/30 text-[11px] text-[#F8F5EC] hover:bg-[#DAA017]/20"
               >
                 Débora Santos (0142)
               </button>
               <button
                 type="button"
                 onClick={() => setScannerCode('BN-INVALID-9999')}
-                className="px-2.5 py-1 rounded-md bg-[#1A1A1A] border border-rose-500/40 text-[11px] text-rose-300 hover:bg-rose-950/40"
+                className="px-3 py-2 rounded-md bg-[#1A1A1A] border border-rose-500/40 text-[11px] text-rose-300 hover:bg-rose-950/40"
               >
                 Código Inválido
               </button>

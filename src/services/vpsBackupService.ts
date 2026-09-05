@@ -392,6 +392,14 @@ export function generateJsonForTables(
 /**
  * Gera comando pg_dump para execução direta via SSH na VPS
  */
+function sanitizeShellArg(input: string): string {
+  return input.replace(/[^a-zA-Z0-9._@:\/-]/g, '');
+}
+
+function sanitizeTableName(input: string): string {
+  return input.replace(/[^a-zA-Z0-9_]/g, '');
+}
+
 export function generatePgDumpCommand(
   config: {
     vpsHost: string;
@@ -404,15 +412,19 @@ export function generatePgDumpCommand(
   }
 ): string {
   const { vpsHost, vpsPort, vpsUser, vpsDbName, tableNames, format, compressed } = config;
-  const tableArgs = tableNames.map((t) => `-t ${t}`).join(' ');
+  const safeHost = sanitizeShellArg(vpsHost);
+  const safePort = sanitizeShellArg(vpsPort);
+  const safeUser = sanitizeShellArg(vpsUser);
+  const safeDbName = sanitizeShellArg(vpsDbName);
+  const tableArgs = tableNames.map((t) => `-t ${sanitizeTableName(t)}`).join(' ');
   const formatFlag = format === 'custom' ? '-F c' : format === 'tar' ? '-F t' : '-F p';
   const compressFlag = compressed ? '| gzip > backup.sql.gz' : '> backup.sql';
 
   if (format === 'custom' || format === 'tar') {
-    return `pg_dump -h ${vpsHost} -p ${vpsPort} -U ${vpsUser} ${formatFlag} -d ${vpsDbName} ${tableArgs} -f backup_${vpsDbName}_$(date +%Y%m%d_%H%M%S).dump`;
+    return `pg_dump -h ${safeHost} -p ${safePort} -U ${safeUser} ${formatFlag} -d ${safeDbName} ${tableArgs} -f backup_${safeDbName}_$(date +%Y%m%d_%H%M%S).dump`;
   }
 
-  return `pg_dump -h ${vpsHost} -p ${vpsPort} -U ${vpsUser} ${tableArgs} --inserts --clean --if-exists -d ${vpsDbName} ${compressFlag}`;
+  return `pg_dump -h ${safeHost} -p ${safePort} -U ${safeUser} ${tableArgs} --inserts --clean --if-exists -d ${safeDbName} ${compressFlag}`;
 }
 
 /**
@@ -454,6 +466,12 @@ export function generateBackupShellScript(
   const cronExpr = getCronExpressionFromSchedule(schedule);
   const ext = schedule.compression === 'gzip' ? 'sql.gz' : schedule.compression === 'zstd' ? 'sql.zst' : 'sql';
 
+  const safeHost = sanitizeShellArg(vpsConfig.vpsHost);
+  const safePort = sanitizeShellArg(vpsConfig.vpsPort);
+  const safeDbName = sanitizeShellArg(vpsConfig.vpsDbName);
+  const safeUser = sanitizeShellArg(vpsConfig.vpsUser);
+  const safeBackupPath = sanitizeShellArg(schedule.backupPath || '/var/backups/postgres');
+
   return `#!/usr/bin/env bash
 # =============================================================================
 # SCRIPT DE BACKUP AUTOMATIZADO DO POSTGRESQL - VPS IGREJA BOAS NOVAS
@@ -464,16 +482,24 @@ export function generateBackupShellScript(
 set -eo pipefail
 
 # 1. Configurações do Ambiente VPS
-DB_HOST="${vpsConfig.vpsHost}"
-DB_PORT="${vpsConfig.vpsPort}"
-DB_NAME="${vpsConfig.vpsDbName}"
-DB_USER="${vpsConfig.vpsUser}"
-BACKUP_DIR="${schedule.backupPath || '/var/backups/postgres'}"
+DB_HOST="${safeHost}"
+DB_PORT="${safePort}"
+DB_NAME="${safeDbName}"
+DB_USER="${safeUser}"
+BACKUP_DIR="${safeBackupPath}"
 TIMESTAMP=$(date +"%Y%m%d_%H%M%S")
 FILENAME="\${DB_NAME}_\${TIMESTAMP}.${ext}"
 BACKUP_FILE="\${BACKUP_DIR}/\${FILENAME}"
 LOG_FILE="\${BACKUP_DIR}/backup_\${TIMESTAMP}.log"
 RETENTION_DAYS=${schedule.retentionDays}
+
+# IMPORTANTE: Defina a variável de ambiente PGPASSWORD antes de executar este script
+# export PGPASSWORD="sua_senha_aqui"
+# Ou use ~/.pgpass para armazenamento seguro
+if [ -z "\${PGPASSWORD}" ]; then
+    echo "ERRO: Variável PGPASSWORD não definida. Configure antes de executar." | tee -a "\${LOG_FILE}"
+    exit 1
+fi
 
 # Cria diretório de destino caso não exista
 mkdir -p "\${BACKUP_DIR}"

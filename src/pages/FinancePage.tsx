@@ -394,7 +394,8 @@ export const FinancePage: React.FC = () => {
           </div>
         </div>
 
-        <div className="overflow-x-auto">
+        {/* Desktop Table */}
+        <div className="overflow-x-auto hidden lg:block">
           <table className="w-full text-left text-xs">
             <thead>
               <tr className="border-b border-[#DAA017]/20 text-[#DAA017] uppercase tracking-wider font-semibold">
@@ -437,7 +438,7 @@ export const FinancePage: React.FC = () => {
                           const don = donations.find((d) => d.amount === tx.amount) || donations[0];
                           setSelectedReceipt(don);
                         }}
-                        className="p-1.5 rounded-lg text-[#DAA017] hover:bg-[#DAA017]/20 transition-colors"
+                        className="p-2.5 rounded-lg text-[#DAA017] hover:bg-[#DAA017]/20 transition-colors"
                         title="Ver Recibo Eclesiástico"
                       >
                         <Receipt className="w-4 h-4 mx-auto" />
@@ -448,6 +449,40 @@ export const FinancePage: React.FC = () => {
               })}
             </tbody>
           </table>
+        </div>
+
+        {/* Mobile Cards */}
+        <div className="lg:hidden space-y-3">
+          {filteredTransactions.map((tx) => {
+            const isIncome = tx.type === 'income';
+            return (
+              <div key={tx.id} className="card-gold-glass rounded-xl p-4 flex flex-col gap-2">
+                <div className="flex items-center justify-between">
+                  <span className="text-xs text-[#F8F5EC]/60">{formatDate(tx.date)}</span>
+                  <Badge variant={isIncome ? 'gold' : 'danger'} size="sm">{tx.category}</Badge>
+                </div>
+                <p className="text-sm font-medium text-[#F8F5EC] truncate">{tx.description}</p>
+                <div className="flex items-center justify-between">
+                  <span className="text-xs text-[#F8F5EC]/60 uppercase">{tx.payment_method}</span>
+                  <div className="flex items-center gap-2">
+                    <span className={`font-mono font-bold text-sm ${isIncome ? 'text-emerald-400' : 'text-rose-400'}`}>
+                      {isIncome ? '+' : '-'} {formatCurrency(tx.amount)}
+                    </span>
+                    <button
+                      onClick={() => {
+                        const don = donations.find((d) => d.amount === tx.amount) || donations[0];
+                        setSelectedReceipt(don);
+                      }}
+                      className="p-2.5 rounded-lg text-[#DAA017] hover:bg-[#DAA017]/20 transition-colors"
+                      title="Ver Recibo"
+                    >
+                      <Receipt className="w-4 h-4" />
+                    </button>
+                  </div>
+                </div>
+              </div>
+            );
+          })}
         </div>
       </div>
 

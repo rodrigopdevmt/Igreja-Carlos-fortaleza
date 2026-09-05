@@ -1,8 +1,17 @@
 import React, { useState } from 'react';
-import { Book, Search, Sparkles, Bookmark, Share2, Copy, Check } from 'lucide-react';
+import {
+  Book,
+  Search,
+  Sparkles,
+  Copy,
+  Check,
+  CalendarDays,
+  Crown,
+} from 'lucide-react';
 import { Button } from '@/components/ui/Button';
 import { Badge } from '@/components/ui/Badge';
 import { Input } from '@/components/ui/Input';
+import { YEAR_THEME, MONTHLY_THEMES_2026 } from '@/data/churchData';
 
 interface Verse {
   book: string;
@@ -93,14 +102,66 @@ export const BiblePage: React.FC = () => {
         </div>
       </div>
 
+      {/* Tema Central do Ano */}
+      <div className="rounded-3xl bg-gradient-to-r from-[#221B13] via-[#3A2E1F]/50 to-[#221B13] border border-[#DAA017]/30 p-6 sm:p-8">
+        <div className="flex items-center gap-2 mb-3">
+          <div className="w-9 h-9 rounded-xl bg-gradient-to-br from-[#DAA017] to-[#B8860B] flex items-center justify-center text-[#1A1A1A]">
+            <Crown className="w-5 h-5" />
+          </div>
+          <span className="text-xs font-bold uppercase tracking-widest text-[#DAA017]">
+            Tema Central do Ano 2026
+          </span>
+        </div>
+        <h2 className="font-serif text-2xl sm:text-3xl font-bold text-[#F8F5EC] leading-tight">
+          {YEAR_THEME.title}
+        </h2>
+        <p className="mt-3 text-sm text-[#F8F5EC]/70 italic leading-relaxed max-w-3xl">
+          {YEAR_THEME.verse}
+        </p>
+        <p className="mt-2 text-xs text-[#DAA017] font-bold">{YEAR_THEME.reference}</p>
+      </div>
+
+      {/* Temas Mensais 2026 */}
+      <section>
+        <div className="flex items-center gap-2.5 mb-4">
+          <div className="w-9 h-9 rounded-xl bg-[#DAA017]/10 border border-[#DAA017]/30 flex items-center justify-center text-[#DAA017]">
+            <CalendarDays className="w-5 h-5" />
+          </div>
+          <div>
+            <h2 className="font-serif text-xl font-bold text-[#F8F5EC]">Temas Mensais da IABN</h2>
+            <p className="text-[11px] text-[#F8F5EC]/50">12 meses de edificação bíblica ao longo de 2026</p>
+          </div>
+        </div>
+
+        <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-3">
+          {MONTHLY_THEMES_2026.map((t, idx) => (
+            <div
+              key={t.month}
+              className="card-gold-glass rounded-2xl p-4 hover-lift animate-fade-in-up"
+              style={{ animationDelay: `${idx * 0.03}s` }}
+            >
+              <p className="text-[10px] font-bold uppercase tracking-widest text-[#DAA017]/70 mb-1">
+                {t.month} / 2026
+              </p>
+              <h3 className="font-serif text-base font-bold text-[#F8F5EC] leading-snug">
+                {t.title}
+              </h3>
+              <p className="mt-2 text-xs text-[#F8F5EC]/50 font-mono">{t.reference}</p>
+            </div>
+          ))}
+        </div>
+      </section>
+
       {/* Search bar */}
-      <div className="p-4 rounded-xl bg-[#221B13]/90 border border-[#DAA017]/25 shadow-lg">
-        <Input
-          icon={Search}
-          placeholder="Pesquisar por livro, palavra-chave ou tema bíblico (ex: boas novas, apóstolos, dízimos)..."
-          value={search}
-          onChange={(e) => setSearch(e.target.value)}
-        />
+      <div className="pt-4">
+        <div className="p-4 rounded-xl bg-[#221B13]/90 border border-[#DAA017]/25 shadow-lg">
+          <Input
+            icon={Search}
+            placeholder="Pesquisar por livro, palavra-chave ou tema bíblico (ex: boas novas, apóstolos, dízimos)..."
+            value={search}
+            onChange={(e) => setSearch(e.target.value)}
+          />
+        </div>
       </div>
 
       {/* Verses Grid */}
@@ -108,7 +169,7 @@ export const BiblePage: React.FC = () => {
         {filteredVerses.map((verse, idx) => (
           <div
             key={idx}
-            className="card-gold-glass rounded-2xl p-6 flex flex-col justify-between transition-all duration-300 group"
+            className="card-gold-glass rounded-2xl p-6 flex flex-col justify-between group"
           >
             <div>
               <div className="flex items-center justify-between mb-3">
@@ -119,7 +180,7 @@ export const BiblePage: React.FC = () => {
                   onClick={() =>
                     handleCopy(`${verse.book} ${verse.chapter}:${verse.verse} - "${verse.text}"`, idx)
                   }
-                  className="p-1.5 rounded-lg text-[#F8F5EC]/60 hover:text-[#DAA017] transition-colors"
+                  className="p-2.5 rounded-lg text-[#F8F5EC]/60 hover:text-[#DAA017] transition-colors"
                   title="Copiar Versículo"
                 >
                   {copiedIndex === idx ? (

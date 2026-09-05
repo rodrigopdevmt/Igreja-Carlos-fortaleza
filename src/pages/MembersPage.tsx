@@ -351,14 +351,14 @@ export const MembersPage: React.FC = () => {
                       setSelectedMember(member);
                       setDetailsModalOpen(true);
                     }}
-                    className="p-1.5 rounded-lg text-[#F8F5EC]/60 hover:text-[#DAA017] hover:bg-[#3A2E1F]/50 transition-colors"
+                    className="p-2.5 rounded-lg text-[#F8F5EC]/60 hover:text-[#DAA017] hover:bg-[#3A2E1F]/50 transition-colors"
                     title="Visualizar Ficha Completa"
                   >
                     <Eye className="w-4 h-4" />
                   </button>
                   <button
                     onClick={() => handleOpenEdit(member)}
-                    className="p-1.5 rounded-lg text-[#F8F5EC]/60 hover:text-[#DAA017] hover:bg-[#3A2E1F]/50 transition-colors"
+                    className="p-2.5 rounded-lg text-[#F8F5EC]/60 hover:text-[#DAA017] hover:bg-[#3A2E1F]/50 transition-colors"
                     title="Editar Membro"
                   >
                     <Edit2 className="w-4 h-4" />
@@ -369,7 +369,7 @@ export const MembersPage: React.FC = () => {
                         deleteMember(member.id);
                       }
                     }}
-                    className="p-1.5 rounded-lg text-[#F8F5EC]/60 hover:text-rose-400 hover:bg-rose-950/40 transition-colors"
+                    className="p-2.5 rounded-lg text-[#F8F5EC]/60 hover:text-rose-400 hover:bg-rose-950/40 transition-colors"
                     title="Excluir Membro"
                   >
                     <Trash2 className="w-4 h-4" />

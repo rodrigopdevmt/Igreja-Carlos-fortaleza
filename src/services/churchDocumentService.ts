@@ -191,12 +191,10 @@ export function generateDocumentSecurityCode(type: DocumentType): { code: string
   const randomNum = Math.floor(1000 + Math.random() * 9000);
   const code = `IBN-${prefixMap[type]}-${year}-${randomNum}`;
   
-  // Pseudo SHA-256 64-char hex string
-  const chars = '0123456789abcdef';
-  let hash = '';
-  for (let i = 0; i < 64; i++) {
-    hash += chars[Math.floor(Math.random() * chars.length)];
-  }
+  // Generate cryptographically secure hash using Web Crypto API
+  const array = new Uint8Array(32);
+  crypto.getRandomValues(array);
+  const hash = Array.from(array, (b) => b.toString(16).padStart(2, '0')).join('');
 
   return { code, hash };
 }

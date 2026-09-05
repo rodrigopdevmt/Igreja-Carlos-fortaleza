@@ -89,7 +89,7 @@ export const SettingsPage: React.FC = () => {
   const [vpsPort, setVpsPort] = useState('5432');
   const [vpsDbName, setVpsDbName] = useState('boas_novas_db');
   const [vpsUser, setVpsUser] = useState('boasnovas_user');
-  const [vpsPassword, setVpsPassword] = useState('••••••••••••••••');
+  const [vpsPassword, setVpsPassword] = useState('');
   const [vpsSsl, setVpsSsl] = useState(true);
   const [isTestingConnection, setIsTestingConnection] = useState(false);
   const [connectionStatus, setConnectionStatus] = useState<'connected' | 'testing' | 'idle'>('connected');
@@ -126,8 +126,23 @@ export const SettingsPage: React.FC = () => {
   };
 
   const generateFullSqlDump = () => {
+    const escapeSql = (val: string | null | undefined): string => {
+      if (val === null || val === undefined) return 'NULL';
+      return `'${String(val).replace(/'/g, "''").replace(/;/g, '').replace(/--/g, '')}'`;
+    };
+
+    const safeMembers = members.map(
+      (m) =>
+        `INSERT INTO members (id, full_name, email, phone, role, status, can_access_lives, qr_hash) VALUES (${escapeSql(m.id)}, ${escapeSql(m.full_name)}, ${escapeSql(m.email)}, ${escapeSql(m.phone)}, ${escapeSql(m.role)}, ${escapeSql(m.status)}, ${m.can_access_lives}, ${escapeSql(m.qr_hash)}) ON CONFLICT (id) DO NOTHING;`
+    ).join('\n');
+
+    const safeTransactions = transactions.map(
+      (t) =>
+        `INSERT INTO financial_transactions (id, person_name, type, category, amount, payment_method, date, status) VALUES (${escapeSql(t.id)}, ${escapeSql(t.person_name)}, ${escapeSql(t.type)}, ${escapeSql(t.category)}, ${Number(t.amount) || 0}, ${escapeSql(t.payment_method)}, ${escapeSql(t.date)}, ${escapeSql(t.status)}) ON CONFLICT (id) DO NOTHING;`
+    ).join('\n');
+
     return `-- =============================================================================
--- DUMP COMPLETO DO BANCO DE DADOS - IGREJA APOSTÓLICA BOAS NOVAS
+-- DUMP COMPLETO DO BANCO DE DADOS - IGREJA APOSTOLICA BOAS NOVAS
 -- Exportado em: ${new Date().toLocaleString('pt-BR')}
 -- Engine Alvo: PostgreSQL 16+ na VPS
 -- =============================================================================
@@ -156,28 +171,10 @@ CREATE TABLE IF NOT EXISTS members (
 
 -- 2. DADOS REGISTRADOS ATUALMENTE NO SISTEMA
 -- Total de Membros: ${members.length}
-${members
-  .map(
-    (m) =>
-      `INSERT INTO members (id, full_name, email, phone, role, status, can_access_lives, qr_hash) VALUES ('${
-        m.id
-      }', '${m.full_name.replace(/'/g, "''")}', '${m.email || ''}', '${m.phone || ''}', '${m.role}', '${
-        m.status
-      }', ${m.can_access_lives}, '${m.qr_hash || ''}') ON CONFLICT (id) DO NOTHING;`
-  )
-  .join('\n')}
+${safeMembers}
 
--- Total de Transações Financeiras: ${transactions.length}
-${transactions
-  .map(
-    (t) =>
-      `INSERT INTO financial_transactions (id, person_name, type, category, amount, payment_method, date, status) VALUES ('${
-        t.id
-      }', '${(t.person_name || '').replace(/'/g, "''")}', '${t.type}', '${t.category}', ${t.amount}, '${
-        t.payment_method
-      }', '${t.date}', '${t.status}') ON CONFLICT (id) DO NOTHING;`
-  )
-  .join('\n')}
+-- Total de Transacoes Financeiras: ${transactions.length}
+${safeTransactions}
 `;
   };
 
@@ -430,7 +427,7 @@ services:
                   <Input
                     type="password"
                     label="Senha de Acesso *"
-                    placeholder="••••••••••••"
+                    placeholder="Digite a senha do banco"
                     value={vpsPassword}
                     onChange={(e) => setVpsPassword(e.target.value)}
                   />
@@ -446,7 +443,7 @@ services:
                   <button
                     onClick={() =>
                       handleCopyText(
-                        `postgresql://${vpsUser}:${vpsPassword === '••••••••••••••••' ? 'senha_secreta' : vpsPassword}@${vpsHost}:${vpsPort}/${vpsDbName}?sslmode=prefer`,
+                        `postgresql://${vpsUser}:${vpsPassword || 'SENHA_NAO_DEFINIDA'}@${vpsHost}:${vpsPort}/${vpsDbName}?sslmode=prefer`,
                         'conn_str'
                       )
                     }
@@ -464,7 +461,7 @@ services:
                   </button>
                 </div>
                 <pre className="font-mono text-xs text-emerald-400 overflow-x-auto whitespace-pre-wrap bg-[#1A1A1A] p-2.5 rounded-lg border border-[#DAA017]/15">
-                  postgresql://{vpsUser}:{vpsPassword === '••••••••••••••••' ? 'senha_secreta' : vpsPassword}@{vpsHost}:{vpsPort}/{vpsDbName}?sslmode=prefer
+                  postgresql://{vpsUser}:{'[PROTEGIDO]'}@{vpsHost}:{vpsPort}/{vpsDbName}?sslmode=prefer
                 </pre>
               </div>
 
