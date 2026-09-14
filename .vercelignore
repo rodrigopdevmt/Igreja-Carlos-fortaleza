@@ -4,13 +4,9 @@ node_modules
 Dockerfile
 docker-compose.yml
 docker-compose*.yml
-*.md
 .env
 .env.*
 !.env.example
-public
-src
-assets
-.bun.lock
-package-lock.json
-metadata.json
+ARQUIVOS/
+backups/
+dist/
