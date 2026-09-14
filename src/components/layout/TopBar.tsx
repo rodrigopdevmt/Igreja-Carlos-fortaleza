@@ -1,4 +1,5 @@
 import React, { useState, useRef, useEffect } from 'react';
+import { createPortal } from 'react-dom';
 import {
   Building2,
   Shield,
@@ -119,7 +120,7 @@ export const TopBar: React.FC<TopBarProps> = ({ onOpenQuickScan, onToggleSidebar
             setScanInput('');
             setQrModalOpen(true);
           }}
-          className="hidden sm:inline-flex text-xs"
+          className="inline-flex text-xs"
         >
           Check-in QR
         </Button>
@@ -185,14 +186,15 @@ export const TopBar: React.FC<TopBarProps> = ({ onOpenQuickScan, onToggleSidebar
         </div>
       </div>
 
-      {/* QR Code Modal */}
-      <Modal
-        isOpen={qrModalOpen}
-        onClose={() => setQrModalOpen(false)}
-        title="Validador de Credencial & Check-in"
-        subtitle="Simulador de Leitura de QR Code / Codigo de Membro"
-        maxWidth="md"
-      >
+      {/* QR Code Modal — portal to body to escape stacking context */}
+      {createPortal(
+        <Modal
+          isOpen={qrModalOpen}
+          onClose={() => setQrModalOpen(false)}
+          title="Validador de Credencial & Check-in"
+          subtitle="Simulador de Leitura de QR Code / Codigo de Membro"
+          maxWidth="md"
+        >
         <form onSubmit={handleTestScan} className="space-y-4">
           <Input
             label="Codigo ou Hash do QR Code"
@@ -246,7 +248,9 @@ export const TopBar: React.FC<TopBarProps> = ({ onOpenQuickScan, onToggleSidebar
             </div>
           </div>
         )}
-      </Modal>
+      </Modal>,
+        document.body
+      )}
     </header>
   );
 };

@@ -15,8 +15,9 @@ import {
   Calendar,
   Building2,
   FileText,
+  ArrowLeft,
 } from 'lucide-react';
-import { Link } from 'react-router-dom';
+import { Link, useNavigate } from 'react-router-dom';
 import { useChurch, Credential } from '@/context/ChurchContext';
 import { GoldLogo } from '@/components/common/GoldLogo';
 import { Button } from '@/components/ui/Button';
@@ -27,6 +28,7 @@ import { formatDate } from '@/lib/utils';
 
 export const CredentialsPage: React.FC = () => {
   const { credentials, members, issueCredential, revokeCredential, validateQrCode, currentTenant } = useChurch();
+  const navigate = useNavigate();
 
   const [search, setSearch] = useState('');
   const [activeTab, setActiveTab] = useState<'cards' | 'scanner'>('cards');
@@ -78,6 +80,13 @@ export const CredentialsPage: React.FC = () => {
       <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-4">
         <div>
           <div className="flex items-center gap-2">
+            <button
+              onClick={() => navigate(-1)}
+              className="sm:hidden p-2 rounded-xl bg-[#221B13]/80 border border-[#DAA017]/20 text-[#F8F5EC] hover:text-[#DAA017] hover:border-[#DAA017]/40 transition-colors"
+              aria-label="Voltar"
+            >
+              <ArrowLeft className="w-5 h-5" />
+            </button>
             <h1 className="font-serif text-2xl sm:text-3xl font-bold text-[#F8F5EC]">
               Carteirinhas & Credenciais Digitais
             </h1>
@@ -85,7 +94,7 @@ export const CredentialsPage: React.FC = () => {
               QR Criptografado
             </Badge>
           </div>
-          <p className="text-xs sm:text-sm text-[#F8F5EC]/60 mt-1">
+          <p className="text-xs sm:text-sm text-[#F8F5EC]/60 mt-1 ml-0 sm:ml-0">
             Emissão de credenciais eclesiásticas com QR Code para controle de acesso e identificação
           </p>
         </div>

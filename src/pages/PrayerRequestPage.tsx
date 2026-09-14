@@ -1,5 +1,5 @@
 import React, { useState, useEffect } from 'react';
-import { Link } from 'react-router-dom';
+import { Link, useNavigate } from 'react-router-dom';
 import {
   Heart,
   Send,
@@ -9,6 +9,7 @@ import {
   Flame,
   Users,
   ArrowRight,
+  ArrowLeft,
   CheckCircle2,
   Quote,
   Lock,
@@ -64,6 +65,7 @@ const SEED_REQUESTS: PrayerRequest[] = [
 
 export const PrayerRequestPage: React.FC = () => {
   const { currentTenant } = useChurch();
+  const navigate = useNavigate();
 
   const [requests, setRequests] = useState<PrayerRequest[]>(SEED_REQUESTS);
   const [formName, setFormName] = useState('');
@@ -133,9 +135,18 @@ export const PrayerRequestPage: React.FC = () => {
       {/* Header */}
       <header className="relative z-10 border-b border-[#DAA017]/15 bg-[#16120D]/80 backdrop-blur-xl">
         <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 h-20 flex items-center justify-between">
-          <Link to="/" className="flex items-center gap-3">
-            <GoldLogo size="lg" showText={true} />
-          </Link>
+          <div className="flex items-center gap-3">
+            <button
+              onClick={() => navigate(-1)}
+              className="sm:hidden p-2 rounded-xl bg-[#221B13]/80 border border-[#DAA017]/20 text-[#F8F5EC] hover:text-[#DAA017] hover:border-[#DAA017]/40 transition-colors"
+              aria-label="Voltar"
+            >
+              <ArrowLeft className="w-5 h-5" />
+            </button>
+            <Link to="/" className="flex items-center gap-3">
+              <GoldLogo size="lg" showText={true} />
+            </Link>
+          </div>
           <Link to="/demo/dashboard">
             <Button variant="outline" size="sm" icon={ArrowRight} iconPosition="right">
               Console Interno

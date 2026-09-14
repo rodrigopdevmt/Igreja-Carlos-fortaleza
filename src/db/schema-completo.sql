@@ -501,3 +501,27 @@ VALUES
     ('00000000-0000-0000-0000-000000000212', '00000000-0000-0000-0000-000000000001', 'Ministério de Eventos', 'Fernanda e Gleyce', 'ministerio', 0),
     ('00000000-0000-0000-0000-000000000213', '00000000-0000-0000-0000-000000000001', 'Ministério de Manutenção', 'Marquinhos e Daniel', 'ministerio', 0)
 ON CONFLICT (id) DO NOTHING;
+
+-- =============================================================================
+-- PERMISSÕES PARA POSTGREST
+-- =============================================================================
+
+-- Garantir que o boasnovas_user tem permissões completas em todas as tabelas
+GRANT ALL PRIVILEGES ON ALL TABLES IN SCHEMA public TO boasnovas_user;
+GRANT ALL PRIVILEGES ON ALL SEQUENCES IN SCHEMA public TO boasnovas_user;
+GRANT USAGE ON SCHEMA public TO boasnovas_user;
+
+-- Criar papel anônimo para leitura (PostgREST usa este papel)
+DO $$ BEGIN
+    CREATE ROLE anon;
+EXCEPTION WHEN duplicate_object THEN null; END $$;
+
+GRANT USAGE ON SCHEMA public TO anon;
+GRANT SELECT ON ALL TABLES IN SCHEMA public TO anon;
+
+-- Garantir que o boasnovas_user pode executar funções
+GRANT EXECUTE ON ALL FUNCTIONS IN SCHEMA public TO boasnovas_user;
+
+-- =============================================================================
+-- FIM DO SCHEMA
+-- =============================================================================

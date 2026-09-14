@@ -4,7 +4,7 @@ version: '3.8'
 # IGREJA APOSTÓLICA BOAS NOVAS (IABN) - STACK PARA CASAOS
 # =============================================================================
 # Suba toda a stack com:  docker compose up -d
-# Banco: PostgreSQL 16 + Aplicação Web (React/Vite build) + Backup automático
+# Banco: PostgreSQL 16 + PostgREST (API REST) + Aplicação Web + Backup automático
 # =============================================================================
 
 services:
@@ -36,7 +36,32 @@ services:
       - iabn_net
 
   # ---------------------------------------------------------------------------
-  # 2. APLICAÇÃO WEB (frontend servido via nginx)
+  # 2. POSTGREST (API REST automática do PostgreSQL)
+  # ---------------------------------------------------------------------------
+  postgrest:
+    image: postgrest/postgrest:v12.2.3
+    container_name: iabn_postgrest
+    restart: always
+    depends_on:
+      postgres:
+        condition: service_healthy
+    environment:
+      PGRST_DB_URI: "postgres://boasnovas_user:${POSTGRES_PASSWORD}@postgres:5432/boas_novas_db"
+      PGRST_DB_SCHEMAS: "public"
+      PGRST_DB_ANON_ROLE: "boasnovas_user"
+      PGRST_DB_MAX_ROWS: 1000
+      PGRST_DB_USE_LEGACY_GUC: "false"
+      PGRST_JWT_SECRET: "${JWT_SECRET:-chave_super_secreta_iabn_2026}"
+      PGRST_SERVER_PORT: "3100"
+      PGRST_DB_SCHEMAS_FOR_OPENAPI: "public"
+      PGRST_DB_SCHEMAS_FOR_ROUTER: "public"
+    ports:
+      - "3100:3100"
+    networks:
+      - iabn_net
+
+  # ---------------------------------------------------------------------------
+  # 3. APLICAÇÃO WEB (frontend servido via nginx)
   # ---------------------------------------------------------------------------
   app:
     build:
@@ -47,8 +72,10 @@ services:
     depends_on:
       postgres:
         condition: service_healthy
+      postgrest:
+        condition: service_started
     environment:
-      VITE_API_URL: ${VITE_API_URL:-http://localhost:3000}
+      VITE_API_URL: /rest
       VITE_SUPABASE_URL: ${VITE_SUPABASE_URL:-}
       VITE_SUPABASE_PUBLISHABLE_KEY: ${VITE_SUPABASE_PUBLISHABLE_KEY:-}
     ports:
@@ -57,7 +84,7 @@ services:
       - iabn_net
 
   # ---------------------------------------------------------------------------
-  # 3. ROTINA DE BACKUP AUTOMÁTICO DIÁRIO
+  # 4. ROTINA DE BACKUP AUTOMÁTICO DIÁRIO
   # ---------------------------------------------------------------------------
   db_backup:
     image: prodrigestivill/postgres-backup-local:16-alpine

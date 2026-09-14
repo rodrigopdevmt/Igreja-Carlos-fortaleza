@@ -78,20 +78,10 @@ export const LandingPage: React.FC = () => {
             <GoldLogo size="lg" showText={true} />
           </div>
 
-          <div className="flex items-center gap-4">
+          <div className="flex items-center gap-2 sm:gap-4">
             <div className="hidden md:flex items-center gap-2 text-xs font-bold tracking-wider text-[#DAA017] uppercase bg-[#DAA017]/10 px-4 py-2 rounded-full border border-[#DAA017]/25">
               <ShieldCheck className="w-3.5 h-3.5" /> Igreja Boas Novas Oficial
             </div>
-            <Link to="/oracao">
-              <Button variant="outline" size="md" icon={Heart}>
-                Pedido de Oração
-              </Button>
-            </Link>
-            <Link to="/demo/dashboard">
-              <Button variant="primary" size="md" icon={ArrowRight} iconPosition="right">
-                Acessar Demo
-              </Button>
-            </Link>
           </div>
         </div>
       </header>
@@ -119,21 +109,20 @@ export const LandingPage: React.FC = () => {
         </p>
 
         {/* CTA Buttons */}
-        <div className="mt-10 flex flex-col sm:flex-row items-center gap-4 animate-fade-in-up stagger-4">
-          <Link to="/demo/dashboard">
+        <div className="mt-10 flex flex-col sm:flex-row items-stretch sm:items-center gap-3 sm:gap-4 w-full sm:w-auto animate-fade-in-up stagger-4">
+          <Link to="/oracao" className="w-full sm:w-auto">
             <Button
               variant="primary"
               size="lg"
-              icon={ArrowRight}
-              iconPosition="right"
-              className="text-base px-10 py-4 glow-gold-lg"
+              icon={Heart}
+              className="text-sm sm:text-base px-6 sm:px-10 py-3.5 sm:py-4 glow-gold-lg w-full sm:w-auto justify-center"
             >
-              Abrir Console Operacional
+              Pedido de Oração
             </Button>
           </Link>
-          <Link to="/demo/credentials">
-            <Button variant="outline" size="lg" icon={QrCode} className="text-base px-8 py-4">
-              Ver Carteirinhas Digitais
+          <Link to="/demo/credentials" className="w-full sm:w-auto">
+            <Button variant="outline" size="lg" icon={QrCode} className="text-sm sm:text-base px-6 sm:px-8 py-3.5 sm:py-4 w-full sm:w-auto justify-center">
+              Ver Carteirinhas
             </Button>
           </Link>
         </div>
