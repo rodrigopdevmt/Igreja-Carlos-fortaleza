@@ -147,7 +147,7 @@ export const PrayerRequestPage: React.FC = () => {
               <GoldLogo size="lg" showText={true} />
             </Link>
           </div>
-          <Link to="/demo/dashboard">
+          <Link to="/painel/dashboard">
             <Button variant="outline" size="sm" icon={ArrowRight} iconPosition="right">
               Console Interno
             </Button>

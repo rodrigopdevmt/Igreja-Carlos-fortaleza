@@ -21,7 +21,7 @@ export const NotFoundPage: React.FC = () => {
             Página Inicial
           </Button>
         </Link>
-        <Link to="/demo/dashboard">
+        <Link to="/painel/dashboard">
           <Button variant="primary" size="md" icon={ArrowLeft}>
             Ir para o Dashboard
           </Button>

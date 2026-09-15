@@ -12,7 +12,7 @@
     {
       "source": "/",
       "has": [{ "type": "host", "value": "app.igrejaboasnovas.online" }],
-      "destination": "/demo/dashboard",
+      "destination": "/painel/dashboard",
       "permanent": false
     }
   ]

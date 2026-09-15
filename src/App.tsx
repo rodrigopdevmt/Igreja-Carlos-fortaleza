@@ -39,8 +39,8 @@ export default function App() {
           <Route path="/area-membro" element={<MemberAreaPage />} />
 
           {/* Mission Control / Management System Sub-Routes */}
-          <Route path="/demo" element={<DashboardLayout />}>
-            <Route index element={<Navigate to="/demo/dashboard" replace />} />
+          <Route path="/painel" element={<DashboardLayout />}>
+            <Route index element={<Navigate to="/painel/dashboard" replace />} />
             <Route path="dashboard" element={<DashboardPage />} />
             <Route path="members" element={<MembersPage />} />
             <Route path="credentials" element={<CredentialsPage />} />

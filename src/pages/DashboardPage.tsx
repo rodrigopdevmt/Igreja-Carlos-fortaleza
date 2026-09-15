@@ -160,7 +160,7 @@ export const DashboardPage: React.FC = () => {
             >
               Lançar Dízimo/Oferta
             </Button>
-            <Link to="/demo/credentials">
+            <Link to="/painel/credentials">
               <Button variant="outline" size="sm" icon={QrCode}>
                 Credenciais
               </Button>
@@ -268,7 +268,7 @@ export const DashboardPage: React.FC = () => {
             <span className="text-[11px] text-[#F8F5EC]/60">
               Qualidade 4K UHD • Transmissão Ativa
             </span>
-            <Link to="/demo/lives">
+            <Link to="/painel/lives">
               <Button variant="outline" size="sm" className="text-xs py-1">
                 Abrir Console
               </Button>
@@ -319,7 +319,7 @@ export const DashboardPage: React.FC = () => {
                 Agenda de Hoje & Cultos
               </h3>
             </div>
-            <Link to="/demo/agenda">
+            <Link to="/painel/agenda">
               <Button variant="ghost" size="sm" className="text-xs text-[#DAA017]">
                 Ver Todos
               </Button>

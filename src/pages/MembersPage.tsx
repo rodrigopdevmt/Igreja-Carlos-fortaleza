@@ -181,7 +181,7 @@ export const MembersPage: React.FC = () => {
         </div>
 
         <div className="flex flex-wrap items-center gap-2">
-          <Link to="/demo/documents">
+          <Link to="/painel/documents">
             <Button variant="outline" size="sm" icon={FileText} className="text-[#DAA017] border-[#DAA017]/40">
               Emitir Certificado / Carta
             </Button>
@@ -336,7 +336,7 @@ export const MembersPage: React.FC = () => {
               <div className="mt-4 pt-2 flex items-center justify-between">
                 <div className="flex items-center gap-1.5">
                   {cred ? (
-                    <Link to="/demo/credentials">
+                    <Link to="/painel/credentials">
                       <span className="inline-flex items-center gap-1 text-[10px] font-bold px-2 py-0.5 rounded bg-emerald-950/80 text-emerald-300 border border-emerald-500/30 hover:bg-emerald-900 transition-colors">
                         <QrCode className="w-3 h-3" /> {cred.code}
                       </span>
