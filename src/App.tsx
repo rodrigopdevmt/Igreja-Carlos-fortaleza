@@ -20,6 +20,8 @@ import { BiblePage } from '@/pages/BiblePage';
 import { DocumentsPage } from '@/pages/DocumentsPage';
 import { SettingsPage } from '@/pages/SettingsPage';
 import { NotFoundPage } from '@/pages/NotFoundPage';
+import { MemberLoginPage } from '@/pages/MemberLoginPage';
+import { MemberAreaPage } from '@/pages/MemberAreaPage';
 
 export default function App() {
   return (
@@ -31,6 +33,10 @@ export default function App() {
 
           {/* Public Prayer Request Page */}
           <Route path="/oracao" element={<PrayerRequestPage />} />
+
+          {/* Member Area - Public Login */}
+          <Route path="/carteirinha" element={<MemberLoginPage />} />
+          <Route path="/area-membro" element={<MemberAreaPage />} />
 
           {/* Mission Control / Management System Sub-Routes */}
           <Route path="/demo" element={<DashboardLayout />}>

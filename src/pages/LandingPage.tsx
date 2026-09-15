@@ -120,7 +120,7 @@ export const LandingPage: React.FC = () => {
               Pedido de Oração
             </Button>
           </Link>
-          <Link to="/demo/credentials" className="w-full sm:w-auto">
+          <Link to="/carteirinha" className="w-full sm:w-auto">
             <Button variant="outline" size="lg" icon={QrCode} className="text-sm sm:text-base px-6 sm:px-8 py-3.5 sm:py-4 w-full sm:w-auto justify-center">
               Ver Carteirinhas
             </Button>
