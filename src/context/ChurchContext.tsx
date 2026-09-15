@@ -120,7 +120,7 @@ interface ChurchContextType {
   hasRole: (allowedRoles: AppRole[]) => boolean;
 
   members: Person[];
-  addMember: (member: Omit<Person, 'id' | 'created_at' | 'tenant_id'>) => void;
+  addMember: (member: Omit<Person, 'id' | 'created_at' | 'tenant_id'>) => Promise<string | null>;
   updateMember: (id: string, updates: Partial<Person>) => void;
   deleteMember: (id: string) => void;
 
@@ -315,7 +315,7 @@ export const ChurchProvider: React.FC<{ children: React.ReactNode }> = ({ childr
     });
   };
 
-  const addMember = async (data: Omit<Person, 'id' | 'created_at' | 'tenant_id'>) => {
+  const addMember = async (data: Omit<Person, 'id' | 'created_at' | 'tenant_id'>): Promise<string | null> => {
     const newPerson = await pgInsert<Person>('people', {
       ...data,
       tenant_id: currentTenant.id,
@@ -323,8 +323,10 @@ export const ChurchProvider: React.FC<{ children: React.ReactNode }> = ({ childr
     if (newPerson) {
       setMembers((prev) => [newPerson, ...prev]);
       addAuditLog('CADASTRO_MEMBRO', 'people', `Novo membro cadastrado: ${newPerson.full_name}`);
-      issueCredential(newPerson.id);
+      const cred = await issueCredential(newPerson.id);
+      return cred.code;
     }
+    return null;
   };
 
   const updateMember = async (id: string, updates: Partial<Person>) => {

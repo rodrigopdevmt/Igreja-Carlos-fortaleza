@@ -1,16 +1,15 @@
 import React, { useState } from 'react';
 import { useNavigate, Link } from 'react-router-dom';
-import { ShieldCheck, Lock, User, ArrowLeft, Eye, EyeOff, Sparkles } from 'lucide-react';
+import { ShieldCheck, Lock, Mail, ArrowLeft, Eye, EyeOff, Sparkles, QrCode } from 'lucide-react';
 import { GoldLogo } from '@/components/common/GoldLogo';
 import { AuroraBackdrop } from '@/components/common/AuroraBackdrop';
 import { Button } from '@/components/ui/Button';
-import { Input } from '@/components/ui/Input';
 
 const POSTGREST_URL = import.meta.env.VITE_API_URL || '/rest';
 
 export const MemberLoginPage: React.FC = () => {
   const navigate = useNavigate();
-  const [identifier, setIdentifier] = useState('');
+  const [email, setEmail] = useState('');
   const [password, setPassword] = useState('');
   const [showPassword, setShowPassword] = useState(false);
   const [error, setError] = useState('');
@@ -22,10 +21,10 @@ export const MemberLoginPage: React.FC = () => {
     setLoading(true);
 
     try {
-      const cleanId = identifier.trim().toLowerCase();
+      const cleanEmail = email.trim().toLowerCase();
 
       const res = await fetch(
-        `${POSTGREST_URL}/people?or=(full_name.ilike.*${cleanId}*,email.ilike.*${cleanId}*,document.ilike.*${cleanId}*)&limit=1`,
+        `${POSTGREST_URL}/people?email=eq.${cleanEmail}&limit=1`,
         { headers: { 'Accept': 'application/json' } }
       );
 
@@ -37,38 +36,42 @@ export const MemberLoginPage: React.FC = () => {
           const person = people[0];
 
           const credRes = await fetch(
-            `${POSTGREST_URL}/credentials?person_id=eq.${person.id}&status=eq.active&limit=1`,
+            `${POSTGREST_URL}/credentials?person_id=eq.${person.id}&status=eq.active&limit=1&order=issued_at.desc`,
             { headers: { 'Accept': 'application/json' } }
           );
 
-          let credential = null;
           if (credRes.ok) {
             const credText = await credRes.text();
             const creds = credText ? JSON.parse(credText) : [];
-            credential = creds[0] || null;
+            const credential = creds[0];
+
+            if (credential && credential.code === password.trim()) {
+              const session = {
+                personId: person.id,
+                fullName: person.full_name,
+                email: person.email,
+                phone: person.phone,
+                document: person.document,
+                birthDate: person.birth_date,
+                baptismDate: person.baptism_date,
+                ministry: person.ministry,
+                photoUrl: person.photo_url,
+                credentialCode: credential.code,
+                credentialRole: credential.person_role || null,
+              };
+
+              sessionStorage.setItem('iabn_member_session', JSON.stringify(session));
+              navigate('/area-membro');
+              return;
+            }
           }
 
-          const session = {
-            personId: person.id,
-            fullName: person.full_name,
-            email: person.email,
-            phone: person.phone,
-            document: person.document,
-            birthDate: person.birth_date,
-            baptismDate: person.baptism_date,
-            ministry: person.ministry,
-            photoUrl: person.photo_url,
-            credentialCode: credential?.code || null,
-            credentialRole: credential?.person_role || null,
-          };
-
-          sessionStorage.setItem('iabn_member_session', JSON.stringify(session));
-          navigate('/area-membro');
+          setError('Código de credencial incorreto. Verifique com a secretaria da igreja.');
           return;
         }
       }
 
-      setError('Membro não encontrado. Verifique seu nome, e-mail ou CPF.');
+      setError('E-mail não encontrado. Verifique se está cadastrado na igreja.');
     } catch {
       setError('Erro de conexão. Tente novamente.');
     } finally {
@@ -100,7 +103,7 @@ export const MemberLoginPage: React.FC = () => {
             Acessar Minha <span className="gold-gradient-text">Conta</span>
           </h1>
           <p className="text-sm text-[#F8F5EC]/50 mt-3">
-            Entre com seu nome, e-mail ou CPF para acessar sua carteirinha digital e certificados.
+            Entre com seu e-mail e o código da sua credencial digital.
           </p>
         </div>
 
@@ -108,15 +111,15 @@ export const MemberLoginPage: React.FC = () => {
           <form onSubmit={handleLogin} className="space-y-5">
             <div>
               <label className="block text-xs font-bold text-[#DAA017] uppercase tracking-wider mb-2">
-                Nome, E-mail ou CPF
+                E-mail Cadastrado
               </label>
               <div className="relative">
-                <User className="absolute left-3 top-1/2 -translate-y-1/2 w-4 h-4 text-[#DAA017]/50" />
+                <Mail className="absolute left-3 top-1/2 -translate-y-1/2 w-4 h-4 text-[#DAA017]/50" />
                 <input
-                  type="text"
-                  value={identifier}
-                  onChange={(e) => setIdentifier(e.target.value)}
-                  placeholder="Digite seu nome completo ou CPF"
+                  type="email"
+                  value={email}
+                  onChange={(e) => setEmail(e.target.value)}
+                  placeholder="seuemail@exemplo.com"
                   className="w-full pl-10 pr-4 py-3 rounded-xl bg-[#2A2218] border border-[#DAA017]/25 text-[#F8F5EC] placeholder:text-[#F8F5EC]/30 focus:outline-none focus:border-[#DAA017]/60 focus:ring-1 focus:ring-[#DAA017]/30 transition-all text-sm"
                   required
                 />
@@ -125,16 +128,17 @@ export const MemberLoginPage: React.FC = () => {
 
             <div>
               <label className="block text-xs font-bold text-[#DAA017] uppercase tracking-wider mb-2">
-                Senha (opcional)
+                Código da Credencial
               </label>
               <div className="relative">
-                <Lock className="absolute left-3 top-1/2 -translate-y-1/2 w-4 h-4 text-[#DAA017]/50" />
+                <QrCode className="absolute left-3 top-1/2 -translate-y-1/2 w-4 h-4 text-[#DAA017]/50" />
                 <input
                   type={showPassword ? 'text' : 'password'}
                   value={password}
                   onChange={(e) => setPassword(e.target.value)}
-                  placeholder="Para acesso futuro"
-                  className="w-full pl-10 pr-10 py-3 rounded-xl bg-[#2A2218] border border-[#DAA017]/25 text-[#F8F5EC] placeholder:text-[#F8F5EC]/30 focus:outline-none focus:border-[#DAA017]/60 focus:ring-1 focus:ring-[#DAA017]/30 transition-all text-sm"
+                  placeholder="Ex: BN-2026-1234"
+                  className="w-full pl-10 pr-10 py-3 rounded-xl bg-[#2A2218] border border-[#DAA017]/25 text-[#F8F5EC] placeholder:text-[#F8F5EC]/30 focus:outline-none focus:border-[#DAA017]/60 focus:ring-1 focus:ring-[#DAA017]/30 transition-all text-sm font-mono"
+                  required
                 />
                 <button
                   type="button"
@@ -144,6 +148,9 @@ export const MemberLoginPage: React.FC = () => {
                   {showPassword ? <EyeOff className="w-4 h-4" /> : <Eye className="w-4 h-4" />}
                 </button>
               </div>
+              <p className="text-[10px] text-[#F8F5EC]/30 mt-1.5">
+                Solicite seu código na secretaria da igreja.
+              </p>
             </div>
 
             {error && (
@@ -158,7 +165,7 @@ export const MemberLoginPage: React.FC = () => {
               size="lg"
               icon={ShieldCheck}
               className="w-full justify-center glow-gold-lg"
-              disabled={loading || !identifier.trim()}
+              disabled={loading || !email.trim() || !password.trim()}
             >
               {loading ? 'Verificando...' : 'Entrar na Área do Membro'}
             </Button>

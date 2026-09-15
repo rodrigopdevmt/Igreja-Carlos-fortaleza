@@ -16,6 +16,7 @@ import {
   Eye,
   Send,
   HeartHandshake,
+  CheckCircle,
 } from 'lucide-react';
 import { useChurch } from '@/context/ChurchContext';
 import { MetricCard } from '@/components/ui/MetricCard';
@@ -66,12 +67,14 @@ export const DashboardPage: React.FC = () => {
   const [donPerson, setDonPerson] = useState('');
   const [donType, setDonType] = useState<'tithe' | 'offering' | 'missions'>('tithe');
   const [donMethod, setDonMethod] = useState<'pix' | 'cash' | 'credit_card'>('pix');
+  const [createdCredCode, setCreatedCredCode] = useState<string | null>(null);
+  const [credModalOpen, setCredModalOpen] = useState(false);
 
-  const handleCreateMember = (e: React.FormEvent) => {
+  const handleCreateMember = async (e: React.FormEvent) => {
     e.preventDefault();
     if (!newMemberName.trim()) return;
 
-    addMember({
+    const credCode = await addMember({
       full_name: newMemberName,
       email: newMemberEmail || `${newMemberName.toLowerCase().replace(/\s+/g, '.')}@email.com`,
       phone: newMemberPhone || '(11) 98888-0000',
@@ -85,6 +88,11 @@ export const DashboardPage: React.FC = () => {
       ministry: newMemberMinistry,
       notes: 'Cadastrado via Quick Action no Dashboard',
     });
+
+    if (credCode) {
+      setCreatedCredCode(credCode);
+      setCredModalOpen(true);
+    }
 
     setNewMemberName('');
     setNewMemberEmail('');
@@ -528,6 +536,41 @@ export const DashboardPage: React.FC = () => {
             </Button>
           </div>
         </form>
+      </Modal>
+
+      {/* Modal: Credencial Gerada */}
+      <Modal
+        isOpen={credModalOpen}
+        onClose={() => setCredModalOpen(false)}
+        title="Credencial Gerada!"
+        subtitle="Compartilhe o código com o membro para acessar a Área do Membro"
+      >
+        <div className="text-center py-4">
+          <div className="w-16 h-16 rounded-2xl bg-green-500/10 border border-green-500/30 flex items-center justify-center mx-auto mb-4">
+            <CheckCircle className="w-8 h-8 text-green-400" />
+          </div>
+          <p className="text-sm text-[#F8F5EC]/60 mb-4">
+            O membro foi cadastrado e a credencial foi emitida com sucesso!
+          </p>
+          <div className="bg-[#2A2218] rounded-xl p-4 border border-[#DAA017]/25 mb-4">
+            <p className="text-xs text-[#DAA017] uppercase tracking-wider mb-2 font-bold">Código de Acesso</p>
+            <p className="font-mono text-2xl font-bold text-[#F8F5EC] tracking-wider">{createdCredCode}</p>
+          </div>
+          <div className="bg-[#2A2218]/50 rounded-xl p-4 border border-[#DAA017]/15 text-left">
+            <p className="text-xs text-[#DAA017] font-bold uppercase tracking-wider mb-2">Instruções para o membro:</p>
+            <ol className="text-xs text-[#F8F5EC]/60 space-y-1.5 list-decimal list-inside">
+              <li>Acesse <span className="text-[#DAA017]">igrejaboasnovas.online/carteirinha</span></li>
+              <li>Insira o e-mail cadastrado</li>
+              <li>Use o código acima como senha</li>
+              <li>Acesse carteirinha digital, certificados e batismo</li>
+            </ol>
+          </div>
+        </div>
+        <div className="flex justify-end pt-3">
+          <Button variant="primary" size="sm" onClick={() => setCredModalOpen(false)}>
+            Entendido
+          </Button>
+        </div>
       </Modal>
     </div>
   );
