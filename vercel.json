@@ -1,6 +1,6 @@
 {
   "framework": "vite",
-  "buildCommand": "npm run build",
+  "buildCommand": "VITE_API_URL=https://synopsis-vocabulary-survive-feelings.trycloudflare.com/rest npm run build",
   "outputDirectory": "dist",
   "rewrites": [
     {

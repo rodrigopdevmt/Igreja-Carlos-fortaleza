@@ -3,7 +3,6 @@ import { useNavigate, Link } from 'react-router-dom';
 import { ShieldCheck, Lock, Mail, ArrowLeft, Eye, EyeOff, Sparkles, QrCode } from 'lucide-react';
 import { GoldLogo } from '@/components/common/GoldLogo';
 import { AuroraBackdrop } from '@/components/common/AuroraBackdrop';
-import { Button } from '@/components/ui/Button';
 
 const POSTGREST_URL = import.meta.env.VITE_API_URL || '/rest';
 
@@ -80,37 +79,37 @@ export const MemberLoginPage: React.FC = () => {
   };
 
   return (
-    <div className="min-h-screen bg-[#1A1A1A] text-[#F8F5EC] relative overflow-hidden flex flex-col items-center justify-center selection:bg-[#DAA017]/30 selection:text-[#F8F5EC]">
+    <div className="min-h-[100dvh] bg-[#1A1A1A] text-[#F8F5EC] relative overflow-hidden flex flex-col items-center justify-center selection:bg-[#DAA017]/30 selection:text-[#F8F5EC] safe-area-top safe-area-bottom">
       <AuroraBackdrop intensity="medium" showGrid={true} />
 
-      <header className="relative z-10 w-full border-b border-[#DAA017]/15 bg-[#16120D]/80 backdrop-blur-xl">
-        <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 h-16 flex items-center justify-between">
-          <Link to="/" className="flex items-center gap-2 text-[#F8F5EC]/60 hover:text-[#DAA017] transition-colors">
+      <header className="relative z-10 w-full border-b border-[#DAA017]/15 bg-[#16120D]/80 backdrop-blur-xl safe-area-top">
+        <div className="max-w-7xl mx-auto px-3 sm:px-4 lg:px-8 h-14 sm:h-16 flex items-center justify-between">
+          <Link to="/" className="flex items-center gap-1.5 sm:gap-2 text-[#F8F5EC]/60 hover:text-[#DAA017] transition-colors">
             <ArrowLeft className="w-4 h-4" />
-            <span className="text-xs font-medium">Voltar ao Site</span>
+            <span className="text-[10px] sm:text-xs font-medium">Voltar</span>
           </Link>
           <GoldLogo size="sm" showText={true} />
         </div>
       </header>
 
-      <main className="relative z-10 w-full max-w-md mx-auto px-4 py-12">
-        <div className="text-center mb-8">
-          <div className="inline-flex items-center gap-2 px-4 py-2 rounded-full bg-[#DAA017]/10 border border-[#DAA017]/30 text-xs font-bold text-[#DAA017] uppercase tracking-widest mb-6">
-            <Sparkles className="w-3.5 h-3.5 text-[#FFE898]" />
+      <main className="relative z-10 w-full max-w-md mx-auto px-4 py-6 sm:py-12">
+        <div className="text-center mb-6 sm:mb-8">
+          <div className="inline-flex items-center gap-1.5 sm:gap-2 px-3 sm:px-4 py-1.5 sm:py-2 rounded-full bg-[#DAA017]/10 border border-[#DAA017]/30 text-[10px] sm:text-xs font-bold text-[#DAA017] uppercase tracking-widest mb-4 sm:mb-6">
+            <Sparkles className="w-3 h-3 text-[#FFE898]" />
             Área do Membro
           </div>
-          <h1 className="font-serif text-3xl font-bold text-[#F8F5EC]">
+          <h1 className="font-serif text-2xl sm:text-3xl font-bold text-[#F8F5EC]">
             Acessar Minha <span className="gold-gradient-text">Conta</span>
           </h1>
-          <p className="text-sm text-[#F8F5EC]/50 mt-3">
+          <p className="text-[10px] sm:text-sm text-[#F8F5EC]/50 mt-2 sm:mt-3">
             Entre com seu e-mail e o código da sua credencial digital.
           </p>
         </div>
 
-        <div className="card-gold-glass rounded-2xl p-8 border border-[#DAA017]/20">
-          <form onSubmit={handleLogin} className="space-y-5">
+        <div className="card-gold-glass rounded-2xl p-5 sm:p-8 border border-[#DAA017]/20">
+          <form onSubmit={handleLogin} className="space-y-4 sm:space-y-5">
             <div>
-              <label className="block text-xs font-bold text-[#DAA017] uppercase tracking-wider mb-2">
+              <label className="block text-[10px] sm:text-xs font-bold text-[#DAA017] uppercase tracking-wider mb-1.5 sm:mb-2">
                 E-mail Cadastrado
               </label>
               <div className="relative">
@@ -120,14 +119,16 @@ export const MemberLoginPage: React.FC = () => {
                   value={email}
                   onChange={(e) => setEmail(e.target.value)}
                   placeholder="seuemail@exemplo.com"
-                  className="w-full pl-10 pr-4 py-3 rounded-xl bg-[#2A2218] border border-[#DAA017]/25 text-[#F8F5EC] placeholder:text-[#F8F5EC]/30 focus:outline-none focus:border-[#DAA017]/60 focus:ring-1 focus:ring-[#DAA017]/30 transition-all text-sm"
+                  className="w-full pl-10 pr-4 py-3 sm:py-3.5 rounded-xl bg-[#2A2218] border border-[#DAA017]/25 text-[#F8F5EC] placeholder:text-[#F8F5EC]/30 focus:outline-none focus:border-[#DAA017]/60 focus:ring-1 focus:ring-[#DAA017]/30 transition-all text-sm"
+                  autoComplete="email"
+                  inputMode="email"
                   required
                 />
               </div>
             </div>
 
             <div>
-              <label className="block text-xs font-bold text-[#DAA017] uppercase tracking-wider mb-2">
+              <label className="block text-[10px] sm:text-xs font-bold text-[#DAA017] uppercase tracking-wider mb-1.5 sm:mb-2">
                 Código da Credencial
               </label>
               <div className="relative">
@@ -137,18 +138,19 @@ export const MemberLoginPage: React.FC = () => {
                   value={password}
                   onChange={(e) => setPassword(e.target.value)}
                   placeholder="Ex: BN-2026-1234"
-                  className="w-full pl-10 pr-10 py-3 rounded-xl bg-[#2A2218] border border-[#DAA017]/25 text-[#F8F5EC] placeholder:text-[#F8F5EC]/30 focus:outline-none focus:border-[#DAA017]/60 focus:ring-1 focus:ring-[#DAA017]/30 transition-all text-sm font-mono"
+                  className="w-full pl-10 pr-10 py-3 sm:py-3.5 rounded-xl bg-[#2A2218] border border-[#DAA017]/25 text-[#F8F5EC] placeholder:text-[#F8F5EC]/30 focus:outline-none focus:border-[#DAA017]/60 focus:ring-1 focus:ring-[#DAA017]/30 transition-all text-sm font-mono"
+                  autoComplete="off"
                   required
                 />
                 <button
                   type="button"
                   onClick={() => setShowPassword(!showPassword)}
-                  className="absolute right-3 top-1/2 -translate-y-1/2 text-[#DAA017]/50 hover:text-[#DAA017] transition-colors"
+                  className="absolute right-3 top-1/2 -translate-y-1/2 text-[#DAA017]/50 hover:text-[#DAA017] transition-colors p-1"
                 >
                   {showPassword ? <EyeOff className="w-4 h-4" /> : <Eye className="w-4 h-4" />}
                 </button>
               </div>
-              <p className="text-[10px] text-[#F8F5EC]/30 mt-1.5">
+              <p className="text-[9px] sm:text-[10px] text-[#F8F5EC]/30 mt-1">
                 Solicite seu código na secretaria da igreja.
               </p>
             </div>
@@ -159,21 +161,31 @@ export const MemberLoginPage: React.FC = () => {
               </div>
             )}
 
-            <Button
+            <button
               type="submit"
-              variant="primary"
-              size="lg"
-              icon={ShieldCheck}
-              className="w-full justify-center glow-gold-lg"
               disabled={loading || !email.trim() || !password.trim()}
+              className="w-full py-3 sm:py-3.5 rounded-xl bg-gradient-to-r from-[#DAA017] to-[#855E09] text-[#1A1A1A] font-bold text-sm uppercase tracking-wider glow-gold-lg transition-all hover:shadow-[0_0_30px_rgba(218,160,23,0.5)] disabled:opacity-50 disabled:cursor-not-allowed active:scale-[0.98]"
             >
-              {loading ? 'Verificando...' : 'Entrar na Área do Membro'}
-            </Button>
+              {loading ? (
+                <span className="flex items-center justify-center gap-2">
+                  <svg className="animate-spin w-4 h-4" viewBox="0 0 24 24" fill="none">
+                    <circle className="opacity-25" cx="12" cy="12" r="10" stroke="currentColor" strokeWidth="4" />
+                    <path className="opacity-75" fill="currentColor" d="M4 12a8 8 0 018-8V0C5.373 0 0 5.373 0 12h4z" />
+                  </svg>
+                  Verificando...
+                </span>
+              ) : (
+                <span className="flex items-center justify-center gap-2">
+                  <ShieldCheck className="w-4 h-4" />
+                  Entrar na Área do Membro
+                </span>
+              )}
+            </button>
           </form>
         </div>
 
-        <div className="mt-6 text-center">
-          <p className="text-xs text-[#F8F5EC]/40">
+        <div className="mt-4 sm:mt-6 text-center">
+          <p className="text-[10px] sm:text-xs text-[#F8F5EC]/40">
             Problemas para acessar? Entre em contato com a secretaria da igreja.
           </p>
         </div>

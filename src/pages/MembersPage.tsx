@@ -66,10 +66,11 @@ export const MembersPage: React.FC = () => {
   });
 
   const filteredMembers = members.filter((m) => {
+    const searchLower = search.toLowerCase();
     const matchesSearch =
-      m.full_name.toLowerCase().includes(search.toLowerCase()) ||
-      m.email.toLowerCase().includes(search.toLowerCase()) ||
-      m.document.includes(search);
+      (m.full_name || '').toLowerCase().includes(searchLower) ||
+      (m.email || '').toLowerCase().includes(searchLower) ||
+      (m.document || '').includes(search);
     const matchesMinistry =
       selectedMinistry === 'all' || m.ministry?.toLowerCase().includes(selectedMinistry.toLowerCase());
     
